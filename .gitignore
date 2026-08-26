@@ -1,5 +1,6 @@
 .emacs.desktop*
 REF/
+.parmdispatch.py
 .headerpolygons.dat
 .header.dat
 .polygons.dat
