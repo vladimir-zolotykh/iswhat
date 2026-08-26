@@ -6,6 +6,7 @@ from functools import wraps
 
 
 def parmdispatch(func):
+    else_func = func
     dispatch: dict[int, Callable] = {}
 
     def register(*values):
@@ -20,7 +21,7 @@ def parmdispatch(func):
         try:
             res = dispatch[num](num)
         except KeyError:
-            res = f"{num} is something else"
+            res = else_func(num)
         return res
 
     wrapper.register = register
