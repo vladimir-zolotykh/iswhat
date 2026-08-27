@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 # PYTHON_ARGCOMPLETE_OK
 from operator import itemgetter
+import pytest
 
 
 class TupleMeta(type):
@@ -26,3 +27,31 @@ class Person(Tuple):
 if __name__ == "__main__":
     bob = Person("Bob", 37, 12000)
     print(bob)
+
+
+@pytest.fixture
+def bob():
+    return Person("Bob", 37, 12000)
+
+
+@pytest.mark.parametrize(
+    "attr, expected",
+    [
+        ("name", "Bob"),
+        ("age", 37),
+        ("salary", 12000),
+    ],
+)
+def test_person_fields(bob, attr, expected):
+    assert getattr(bob, attr) == expected
+
+
+def test_person():
+    bob = Person("Bob", 37, 12000)
+    assert str(bob) == "('Bob', 37, 12000)"
+    for attr, expected in zip(Person._fields, ("Bob", 37, 12000)):
+        assert getattr(bob, attr) == expected
+    with pytest.raises(TypeError, match=""):
+        Person("Max", 38)
+    with pytest.raises(TypeError, match=""):
+        Person("Max", 38, 12000, "Software engineer")
