@@ -6,7 +6,7 @@ from operator import itemgetter
 
 class TupleMeta(type):
     def __init__(cls, clsname, bases, ns):
-        super().__init__(cls, clsname, bases, ns)
+        super().__init__(clsname, bases, ns)
         fields = ns.get("_fields", [])
         for n, fname in enumerate(fields):
             setattr(cls, fname, property(itemgetter(n)))
