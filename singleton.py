@@ -31,4 +31,5 @@ class Module(metaclass=Singleton):
 if __name__ == "__main__":
     m1 = Module("struct")
     m2 = Module("struct")
-    assert m1 is m2
+    m3 = Module("struct")
+    assert m1 is m2 is m3
