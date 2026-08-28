@@ -9,9 +9,9 @@ class Singleton(type):
 
     def __call__(cls, *args, **kwargs):
         name = args[0]
-        if cls not in Singleton._instances or name not in Singleton._instances[cls]:
-            Singleton._instances[cls][name] = super().__call__(*args, **kwargs)
-        return Singleton._instances[cls][name]
+        if cls not in (instances := Singleton._instances) or name not in instances[cls]:
+            instances[cls][name] = super().__call__(*args, **kwargs)
+        return instances[cls][name]
 
 
 class Module(metaclass=Singleton):
