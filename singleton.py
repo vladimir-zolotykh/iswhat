@@ -1,25 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # PYTHON_ARGCOMPLETE_OK
+from collections import defaultdict
 
 
 class Singleton(type):
-    _instances = {}
+    _instances = defaultdict(dict)
 
     def __call__(cls, *args, **kwargs):
         name = args[0]
-        if cls in Singleton._instances:
-            if name in Singleton._instances[cls]:
-                return Singleton._instances[cls][name]
-            else:
-                obj = super().__call__(*args, **kwargs)
-                Singleton._instances[cls][name] = obj
-                return obj
-        else:
-            obj = super().__call__(*args, **kwargs)
-            name = args[0]
-            Singleton._instances[cls] = {name: obj}
-            return obj
+        if cls not in Singleton._instances or name not in Singleton._instances[cls]:
+            Singleton._instances[cls][name] = super().__call__(*args, **kwargs)
+        return Singleton._instances[cls][name]
 
 
 class Module(metaclass=Singleton):
