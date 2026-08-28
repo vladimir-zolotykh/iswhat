@@ -28,11 +28,27 @@ class Module(metaclass=Singleton):
         self.name = name
 
 
+class Package(metaclass=Singleton):
+    def __init__(self, name: str = "struct"):
+        print(f"Initializing module {name}")
+        self.name = name
+
+
 if __name__ == "__main__":
     m1 = Module("struct")
     m2 = Module("struct")
     m3 = Module("struct")
     assert m1 is m2 is m3
+
+
+def test_package1(capsys):
+    p1 = Package("types")
+    o = capsys.readouterr()
+    assert o.out == "Initializing module types\n"
+    p2 = Package("types")
+    o = capsys.readouterr()
+    assert o.out == ""
+    assert p1 is p2
 
 
 def test_module1(capsys):
