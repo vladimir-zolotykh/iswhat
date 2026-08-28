@@ -59,3 +59,13 @@ def test_module1(capsys):
     o = capsys.readouterr()
     assert o.out == ""
     assert m1 is m2
+
+
+def test_mixed(capsys):
+    Singleton._instances.clear()
+    Module("types")
+    o = capsys.readouterr()
+    assert o.out == "Initializing module types\n"
+    Package("types")
+    o = capsys.readouterr()
+    assert o.out == "Initializing module types\n"
