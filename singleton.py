@@ -33,3 +33,13 @@ if __name__ == "__main__":
     m2 = Module("struct")
     m3 = Module("struct")
     assert m1 is m2 is m3
+
+
+def test_module1(capsys):
+    m1 = Module("struct")
+    o = capsys.readouterr()
+    assert o.out == "Initializing module struct\n"
+    m2 = Module("struct")
+    o = capsys.readouterr()
+    assert o.out == ""
+    assert m1 is m2
