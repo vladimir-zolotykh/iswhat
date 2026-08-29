@@ -23,9 +23,12 @@ class Person(Cached):
 
     def __init__(self, name, age, salary):
         print(f"Initializing {type(self).__name__}({name})")
-        self.name = name
-        self.age = age
-        self.salary = salary
+        for var, val in locals().items():
+            setattr(self, var, val)
+
+    def __repr__(self):
+        args = ", ".join(str(getattr(self, fld)) for fld in self._fields)
+        return f"{type(self).__name__}({args})"
 
 
 if __name__ == "__main__":
