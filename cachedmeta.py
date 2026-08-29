@@ -7,18 +7,6 @@ from collections import defaultdict
 class CachedMeta(type):
     _instances = defaultdict(dict)
 
-    def __call__(cls, *args, **kwargs):
-        key = tuple(args)
-        if cls not in (cached := type(cls)._instances) or key not in cached[cls]:
-            cached[cls][key] = super().__call__(*args, **kwargs)
-        return cached[cls][key]
-
-
-class Cached(metaclass=CachedMeta):
-    pass
-
-
-class FieldsMeta(type):
     def __new__(mcls, clsname, bases, clsdict):
         fields = clsdict.get("_fields", [])
         ns = dict(clsdict)
@@ -39,8 +27,18 @@ class FieldsMeta(type):
         ns["__repr__"] = repr
         return super().__new__(mcls, clsname, bases, ns)
 
+    def __call__(cls, *args, **kwargs):
+        key = tuple(args)
+        if cls not in (cached := type(cls)._instances) or key not in cached[cls]:
+            cached[cls][key] = super().__call__(*args, **kwargs)
+        return cached[cls][key]
 
-class Person(Cached, metaclass=FieldsMeta):
+
+class Cached(metaclass=CachedMeta):
+    pass
+
+
+class Person(Cached):
     _fields = ["name", "age", "salary"]
 
 
