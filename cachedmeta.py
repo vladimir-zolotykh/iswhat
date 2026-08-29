@@ -16,6 +16,8 @@ class CachedMeta(type):
                 raise TypeError(
                     f"{type(self).__name__} gets exactly {n} positional arguments"
                 )
+            name = args[0]
+            print(f"Initializing {type(self).__name__}({name})")
             for k, fld in enumerate(fields):
                 setattr(self, fld, args[k])
 
