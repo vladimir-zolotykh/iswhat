@@ -41,6 +41,10 @@ def test_person1(capsys):
     o = capsys.readouterr()
     assert o.out == "Initializing Person(Max)\n"
     assert str(max) == "Person(Max, 42, 25000)"
+    bob2 = Person("Bob", 37, 12000)
+    o = capsys.readouterr()
+    assert o.out == ""
+    assert bob is bob2
 
 
 if __name__ == "__main__":
