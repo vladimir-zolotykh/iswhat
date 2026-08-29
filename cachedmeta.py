@@ -22,7 +22,7 @@ class Person(Cached):
     _fields = ["name", "age", "salary"]
 
     def __init__(self, name, age, salary):
-        print(f"Initializing {type(self).__name__}")
+        print(f"Initializing {type(self).__name__}({name})")
         self.name = name
         self.age = age
         self.salary = salary
