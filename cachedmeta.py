@@ -18,17 +18,30 @@ class Cached(metaclass=CachedMeta):
     pass
 
 
-class Person(Cached):
+class FieldsMeta(type):
+    def __new__(mcls, clsname, bases, clsdict):
+        fields = clsdict.get("_fields", [])
+        ns = dict(clsdict)
+
+        def init(self, *args):
+            if (n := len(fields)) != len(args):
+                raise TypeError(
+                    f"{type(self).__name__} gets exactly {n} positional arguments"
+                )
+            for fld in fields:
+                setattr(self, fld, args.pop())
+
+        def repr(self):
+            args = ", ".join(str(getattr(self, fld)) for fld in fields)
+            return f"{type(self).__name__}({args})"
+
+        ns["__init__"] = init
+        ns["__repr__"] = repr
+        return super().__new__(mcls, clsname, bases, ns)
+
+
+class Person(Cached, metaclass=FieldsMeta):
     _fields = ["name", "age", "salary"]
-
-    def __init__(self, name, age, salary):
-        print(f"Initializing {type(self).__name__}({name})")
-        for var, val in locals().items():
-            setattr(self, var, val)
-
-    def __repr__(self):
-        args = ", ".join(str(getattr(self, fld)) for fld in self._fields)
-        return f"{type(self).__name__}({args})"
 
 
 def test_person1(capsys):
