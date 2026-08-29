@@ -31,6 +31,18 @@ class Person(Cached):
         return f"{type(self).__name__}({args})"
 
 
+def test_person1(capsys):
+    CachedMeta._instances.clear()
+    bob = Person("Bob", 37, 12000)
+    o = capsys.readouterr()
+    assert o.out == "Initializing Person(Bob)\n"
+    assert str(bob) == "Person(Bob, 37, 12000)"
+    max = Person("Max", 42, 25000)
+    o = capsys.readouterr()
+    assert o.out == "Initializing Person(Max)\n"
+    assert str(max) == "Person(Max, 42, 25000)"
+
+
 if __name__ == "__main__":
     CachedMeta._instances.clear()
     bob = Person("Bob", 37, 12000)
