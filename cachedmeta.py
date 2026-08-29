@@ -9,7 +9,6 @@ class CachedMeta(type):
 
     def __new__(mcls, clsname, bases, clsdict):
         fields = clsdict.get("_fields", [])
-        ns = dict(clsdict)
 
         def init(self, *args):
             if (n := len(fields)) != len(args):
@@ -25,9 +24,9 @@ class CachedMeta(type):
             args = ", ".join(str(getattr(self, fld)) for fld in fields)
             return f"{type(self).__name__}({args})"
 
-        ns["__init__"] = init
-        ns["__repr__"] = repr
-        return super().__new__(mcls, clsname, bases, ns)
+        clsdict["__init__"] = init
+        clsdict["__repr__"] = repr
+        return super().__new__(mcls, clsname, bases, clsdict)
 
     def __call__(cls, *args, **kwargs):
         key = tuple(args)
