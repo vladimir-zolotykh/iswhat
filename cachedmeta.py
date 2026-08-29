@@ -5,6 +5,8 @@ from collections import defaultdict
 
 
 class CachedMeta(type):
+    _instances = defaultdict(dict)
+
     def __call__(cls, *args, **kwargs):
         key = tuple(args)
         if cls not in CachedMeta._instances or key not in CachedMeta._instances[cls]:
@@ -27,6 +29,7 @@ class Person(Cached):
 
 
 if __name__ == "__main__":
+    CachedMeta._instances.clear()
     bob = Person("Bob", 37, 12000)
     print(bob)
     max = Person("Max", 42, 25000)
