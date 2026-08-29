@@ -16,8 +16,8 @@ class CachedMeta(type):
                 raise TypeError(
                     f"{type(self).__name__} gets exactly {n} positional arguments"
                 )
-            for fld in fields:
-                setattr(self, fld, args.pop())
+            for k, fld in enumerate(fields):
+                setattr(self, fld, args[k])
 
         def repr(self):
             args = ", ".join(str(getattr(self, fld)) for fld in fields)
