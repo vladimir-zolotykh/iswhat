@@ -16,13 +16,13 @@ class Singleton(type):
 
 class Module(metaclass=Singleton):
     def __init__(self, name: str = "functools"):
-        print(f"Initializing module {name}")
+        print(f"Initializing {type(self).__name__} {name!r}")
         self.name = name
 
 
 class Package(metaclass=Singleton):
     def __init__(self, name: str = "struct"):
-        print(f"Initializing module {name}")
+        print(f"Initializing {type(self).__name__} {name!r}")
         self.name = name
 
 
@@ -36,7 +36,7 @@ if __name__ == "__main__":
 def test_package1(capsys):
     p1 = Package("types")
     o = capsys.readouterr()
-    assert o.out == "Initializing module types\n"
+    assert o.out == "Initializing Package 'types'\n"
     p2 = Package("types")
     o = capsys.readouterr()
     assert o.out == ""
@@ -46,7 +46,7 @@ def test_package1(capsys):
 def test_module1(capsys):
     m1 = Module("struct")
     o = capsys.readouterr()
-    assert o.out == "Initializing module struct\n"
+    assert o.out == "Initializing Module 'struct'\n"
     m2 = Module("struct")
     o = capsys.readouterr()
     assert o.out == ""
@@ -57,7 +57,7 @@ def test_mixed(capsys):
     Singleton._instances.clear()
     Module("types")
     o = capsys.readouterr()
-    assert o.out == "Initializing module types\n"
+    assert o.out == "Initializing Module 'types'\n"
     Package("types")
     o = capsys.readouterr()
-    assert o.out == "Initializing module types\n"
+    assert o.out == "Initializing Package 'types'\n"
