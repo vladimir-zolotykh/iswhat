@@ -9,9 +9,9 @@ class CachedMeta(type):
 
     def __call__(cls, *args, **kwargs):
         key = tuple(args)
-        if cls not in CachedMeta._instances or key not in CachedMeta._instances[cls]:
-            CachedMeta._instances[cls][key] = super().__call__(*args, **kwargs)
-        return CachedMeta._instances[cls][key]
+        if cls not in (cached := type(cls)._instances) or key not in cached[cls]:
+            cached[cls][key] = super().__call__(*args, **kwargs)
+        return cached[cls][key]
 
 
 class Cached(metaclass=CachedMeta):
